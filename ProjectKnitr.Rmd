@@ -1,0 +1,46 @@
+---
+title: "Reproducible Data - Assignment 1"
+author: "Vicki Cocco"
+date: "March 28, 2017"
+output: html_document
+---
+
+```
+
+## Project Description
+=======================
+
+### Install r Libraries
+```{r installlibraries, echo = TRUE}
+        install.packages('dplyr', repos="http://cran.rstudio.com/")
+        library(dplyr)
+        install.packages('dtplyr', repos="http://cran.rstudio.com/")
+        library(dtplyr)
+        install.packages('ggplot2', repos="http://cran.rstudio.com/")
+        library(ggplot2)
+        install.packages('lubridate', repos="http://cran.rstudio.com/")
+        library(lubridate)
+        install.packages('knitr', repos="http://cran.rstudio.com/")
+        library(knitr)
+```
+### Read the activity file
+```{r readingactivity, echo = TRUE}
+        
+        workingdir <- getwd()
+        
+        destfile <- paste(workingdir, "/activity.csv", sep = "")
+        if (!file.exists(destfile)) {
+                print("got here")
+                #  messge stub for a possible error handler
+                print(paste("activity.csv ", 
+                            "does not exist in the working direct ",
+                            "- please put it there"))
+                
+        } else {
+
+                activity <- read.csv("activity.csv" , header = TRUE)
+                tblactivity <- tbl_df(activity)
+                rm(activity)
+                }
+```
+            
