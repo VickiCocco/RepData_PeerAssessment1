@@ -1,32 +1,13 @@
 plot2 <- 
         # prepare the data - calculate the mean for each day
         
-        tblmeans <- tblactivity %>%
+        tblstats <- tblactivity %>%
                 select(steps,
                        date) %>%
                 filter(!is.na(steps)) %>%
-                mutate(intervaldate = as.Date(date, format = "%Y-%m-%d")) %>%
-                arrange(intervaldate) %>%
-                group_by(intervaldate) %>%
-                summarise(stepsstat = mean(steps))
+                group_by(date) %>%
+                summarise(totalsteps = sum(steps))
 
-        tblmeans <- mutate(tblmeans, statname = 'mean')
-        
-        # prepare the data - calculate the median for each day
-        tblmedians <- tblactivity %>%
-                select(steps,
-                       date) %>%
-                filter(!is.na(steps)) %>%
-                mutate(intervaldate = as.Date(date, format = "%Y-%m-%d")) %>%
-                arrange(intervaldate) %>%
-                group_by(intervaldate) %>%
-                summarise(stepsstat = median(steps))
-
-        tblmedians <- mutate(tblmedians, statname = 'median')
-        
-        # bind the two long tables and sorn
-        tblstats <- rbind(tblmeans, tblmedians)
-        tblstats <- arrange(tblstats, intervaldate, statname)
 
         # plot to a pdf file
         #pdf("issues.pdf", width = 7, height = 9)
@@ -47,7 +28,7 @@ plot2 <-
         #labels = paste("long", c(5, 10, 15))
         plot2 <- plot2 + labs(x = "Date" ,
                               y = "Daily Means and Medians of Steps", 
-                              title = "Means and Medians of Steps for Each Day",
+                              title = "Means and Medians of Steps per Day",
                               subtitle = "2010")
         plot2 <- plot2 + theme(plot.title=element_text(size=14, 
                                                        hjust=0.5, 

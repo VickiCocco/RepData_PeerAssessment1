@@ -1,6 +1,7 @@
 plot1 <- 
-        
+        #Process/transform the data (if necessary) into a format suitable for your analysis 
         # prepare the data
+        #Calculate the total number of steps taken per day
         tblsteps <- tblactivity %>%
         select(steps,
                date,
@@ -16,7 +17,7 @@ plot1 <-
         
         # plot the histogram of steps each day
         plot1 <- ggplot(tblsteps, aes(daysteps))
-        plot1 <- plot1 + geom_histogram(bins = 25, aes(fill = ..count..))
+        plot1 <- plot1 + geom_histogram(bins = 10, aes(fill = ..count..))
         plot1 <- plot1 + labs(x = "Number of Steps per Day" ,
                               y = "How Many Days at Each Count", 
                               title = "Distribution of Number of Steps per Day",

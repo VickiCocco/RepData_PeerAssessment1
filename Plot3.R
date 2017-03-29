@@ -8,11 +8,11 @@ plot3 <-
                 filter(!is.na(steps)) %>%
                 arrange(interval) %>%
                 group_by(interval) %>%
-                summarise(stepsstat = mean(steps))
+                summarise(intervalmeansteps = mean(steps))
 
         # get the interval with the highest mean of steps
         tblmaxinterval <- tblintervals %>%
-                        arrange(stepsstat)
+                        arrange(intervalmeansteps)
         
         # find the max mean step interval
         maxrow <- nrow(tblmaxinterval)
