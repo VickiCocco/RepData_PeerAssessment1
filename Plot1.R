@@ -26,12 +26,7 @@ plot1 <-
                                                        face="bold", 
                                                        colour="darkorchid4", 
                                                        vjust=-1)) 
-        plot1 <- plot1 + theme(plot.subtitle=element_text(size=10, 
-                                                       hjust=0.5, 
-                                                       face="bold", 
-                                                       colour="black", 
-                                                       vjust=-1)) 
-        
+ 
         
         print(plot1)
         #dev.off() 
