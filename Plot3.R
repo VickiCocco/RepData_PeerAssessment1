@@ -5,10 +5,26 @@ plot3 <-
                 select(steps,
                        interval,
                        date) %>%
-                filter(steps != "NA") %>%
+                filter(!is.na(steps)) %>%
                 arrange(interval) %>%
                 group_by(interval) %>%
                 summarise(stepsstat = mean(steps))
+
+        # get the interval with the highest mean of steps
+        tblmaxinterval <- tblintervals %>%
+                        arrange(stepsstat)
+        
+        # find the max mean step interval
+        maxrow <- nrow(tblmaxinterval)
+        maxinterval <- tblmaxinterval[maxrow, 1]
+        maxmeansteps <- tblmaxinterval[maxrow,2]
+        
+        # find the start of the time period
+        #numminutes <- (maxinterval - 1) * 5
+        #midnight <- hm("12:00")
+        #intervalstart <- update(hms("12:00"), hours = 0, minutes = numminutes, seconds = 0)
+        
+        
 
         # get the interval dates
         tbldates <- tblactivity %>%

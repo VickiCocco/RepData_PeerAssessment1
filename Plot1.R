@@ -5,7 +5,7 @@ plot1 <-
         select(steps,
                date,
                interval) %>%
-        filter(steps != "NA") %>%
+        filter(!is.na(steps))%>%
         mutate(intervaldate = as.Date(date, format = "%Y-%m-%d")) %>%
         arrange(intervaldate) %>%
         group_by(intervaldate) %>%
