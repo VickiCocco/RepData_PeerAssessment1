@@ -1,49 +1,52 @@
 plot3 <- 
         # prepare the data - calculate the mean for each day
         
-        tblmeans <- tblactivity %>%
+        tblintervals <- tblactivity %>%
                 select(steps,
-                       interval) %>%
+                       interval,
+                       date) %>%
                 filter(steps != "NA") %>%
                 arrange(interval) %>%
                 group_by(interval) %>%
                 summarise(stepsstat = mean(steps))
 
+        # get the interval dates
+        tbldates <- tblactivity %>%
+                select(date) %>%
+                mutate(intervaldate = as.Date(date, format = "%Y-%m-%d")) %>%
+                arrange(intervaldate) %>%
+                summarise(mindate = min(intervaldate), maxdate = max(intervaldate))
 
-# plot to a pdf file
-#pdf("issues.pdf", width = 7, height = 9)
-cbPalette <- c("purple2", 
-               "blue4")
-
-# plot the histogram of steps each day
-plot2 <- ggplot(tblstats, aes(x =intervaldate, 
-                              y = stepsstat, 
-                              group = statname,
-                              colour = statname))
-plot2 <- plot2 + geom_bar(stat = "identity",
-                          aes(fill = statname),
-                          position = "dodge")
-plot2 <- plot2 + scale_fill_manual(values = cbPalette)
-plot2 <- plot2 + scale_colour_manual(values = cbPalette)
-plot2 <- plot2 + guides(fill = guide_legend(title = "Statistic"))
-#labels = paste("long", c(5, 10, 15))
-plot2 <- plot2 + labs(x = "Date" ,
-                      y = "Daily Means and Medians of Steps", 
-                      title = "Means and Medians of Steps for Each Day",
-                      subtitle = "2010")
-plot2 <- plot2 + theme(plot.title=element_text(size=14, 
-                                               hjust=0.5, 
-                                               face="bold", 
-                                               colour="darkorchid4", 
-                                               vjust=-1))
-plot2 <- plot2 + theme(plot.subtitle=element_text(size=10, 
-                                                  hjust=0.5, 
-                                                  face="bold", 
-                                                  colour="black", 
-                                                  vjust=-1)) 
-
-
-
-
-print(plot2)
-#dev.off() 
+        
+        mindate <- tbldates[1,1]
+        maxdate <- tbldates[1,2]
+        
+        # plot to a pdf file
+        #pdf("issues.pdf", width = 7, height = 9)
+        # plot the histogram of steps each day
+        plot3 <- ggplot(tblintervals, aes(x =interval, 
+                                      y = stepsstat))
+        plot3 <- plot3 + geom_line(size=1)
+        plot3 <- plot3 + labs(x = "Interval Number" ,
+                              y = "Average Steps per Interval", 
+                              title = "Average Steps for Each Interval Across All Days",
+                              subtitle = paste("Dates from ", 
+                                                format(mindate, format="%Y-%m-%d"),
+                                                " to ",
+                                                format(maxdate, format="%Y-%m-%d")))
+        plot3 <- plot3 + theme(plot.title=element_text(size=14, 
+                                                       hjust=0.5, 
+                                                       face="bold", 
+                                                       colour="darkorchid4", 
+                                                       vjust=-1))
+        plot3 <- plot3 + theme(plot.subtitle=element_text(size=10, 
+                                                          hjust=0.5, 
+                                                          face="bold", 
+                                                          colour="black", 
+                                                          vjust=-1))
+        plot3 <- plot3 + theme(panel.border = element_rect(colour = "black",
+                                                           fill=NA, 
+                                                           size=2))
+        
+        print(plot3)
+        #dev.off() 
