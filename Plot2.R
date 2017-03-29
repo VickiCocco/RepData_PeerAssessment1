@@ -4,7 +4,7 @@ plot2 <-
         tblmeans <- tblactivity %>%
                 select(steps,
                        date) %>%
-                filter(!is.na(steps))
+                filter(!is.na(steps)) %>%
                 mutate(intervaldate = as.Date(date, format = "%Y-%m-%d")) %>%
                 arrange(intervaldate) %>%
                 group_by(intervaldate) %>%
@@ -16,7 +16,7 @@ plot2 <-
         tblmedians <- tblactivity %>%
                 select(steps,
                        date) %>%
-                filter(steps != "NA") %>%
+                filter(!is.na(steps)) %>%
                 mutate(intervaldate = as.Date(date, format = "%Y-%m-%d")) %>%
                 arrange(intervaldate) %>%
                 group_by(intervaldate) %>%
