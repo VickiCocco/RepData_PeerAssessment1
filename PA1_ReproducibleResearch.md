@@ -1,26 +1,21 @@
----
-title: "Reproducible Data - Assignment 1"
-author: "Vicki Cocco"
-date: "March 28, 2017"
-output: html_document
----
+# Reproducible Research: Peer Assessment 1
 
+
+## Loading and preprocessing the data
+### first loading the libraries needed
+
+```{r installlibraries, echo = TRUE
+        install.packages('dplyr', repos="http://cran.rstudio.com/")
+        library(dplyr)
+        install.packages('dtplyr', repos="http://cran.rstudio.com/")
+        library(dtplyr)
+        install.packages('ggplot2', repos="http://cran.rstudio.com/")
+        library(ggplot2)
+        install.packages('knitr', repos="http://cran.rstudio.com/")
+        library(knitr)
+        }
 ```
-
-## Project Description
-=======================
-
-### The assignment requirements for this portion are:
-### Loading and preprocessing the data
-
-#### Show any code that is needed to
-
-#### Load the data (i.e. read.csv())
-#### Process/transform the data (if necessary) into a format suitable for your analysis
-
-### Read the activity file
-```{r readingactivity, echo = TRUE}
-        
+```{r loaddata, echo = TRUE       
         workingdir <- getwd()
         
         destfile <- paste(workingdir, "/activity.csv", sep = "")
@@ -35,22 +30,17 @@ output: html_document
                 activity <- read.csv("activity.csv" , header = TRUE)
                 tblactivity <- tbl_df(activity)
                 rm(activity)
-                }
-```
-### Portion of the project to answer: What is mean total number of steps taken per day?
-
-
-#### Calculate the total number of steps taken per day
-##### formatting the data for the plot and then creating the plot
-``` r{tblsteps <- tblactivity %>%}
-        select(steps,
-               date,
-               interval) %>%
-        filter(!is.na(steps))%>%
-        mutate(intervaldate = as.Date(date, format = "%Y-%m-%d")) %>%
-        arrange(intervaldate) %>%
-        group_by(intervaldate) %>%
-        summarise(daysteps = sum(steps))
+        }
+        
+        tblsteps <- tblactivity %>%
+                select(steps,
+                       date,
+                       interval) %>%
+                filter(!is.na(steps))%>%
+                mutate(intervaldate = as.Date(date, format = "%Y-%m-%d")) %>%
+                arrange(intervaldate) %>%
+                group_by(intervaldate) %>%
+                summarise(daysteps = sum(steps))
 
         plot1 <- ggplot(tblsteps, aes(daysteps))
         plot1 <- plot1 + geom_histogram(bins = 10, aes(fill = ..count..))
@@ -67,5 +57,22 @@ output: html_document
         
         print(plot1)
 }
-#### Make a histogram of the total number of steps taken each day
-#### Calculate and report the mean and median of the total number of steps taken per day
+
+```
+
+
+
+
+## What is mean total number of steps taken per day?
+
+
+
+## What is the average daily activity pattern?
+
+
+
+## Imputing missing values
+
+
+
+## Are there differences in activity patterns between weekdays and weekends?
