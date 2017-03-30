@@ -37,11 +37,9 @@ plot3 <-
         mindate <- tbldates[1,1]
         maxdate <- tbldates[1,2]
         
-        # plot to a pdf file
-        #pdf("issues.pdf", width = 7, height = 9)
         # plot the histogram of steps each day
         plot3 <- ggplot(tblintervals, aes(x =interval, 
-                                      y = stepsstat))
+                                      y = intervalmeansteps))
         plot3 <- plot3 + geom_line(size=1)
         plot3 <- plot3 + labs(x = "Interval Number" ,
                               y = "Average Steps per Interval", 
@@ -63,6 +61,12 @@ plot3 <-
         plot3 <- plot3 + theme(panel.border = element_rect(colour = "black",
                                                            fill=NA, 
                                                            size=2))
+        submsg <- " <- Highest average interval "
+        submsg <- paste(submsg, maxinterval)
+        submsg <- paste(submsg, " with a mean of ")
+        submsg <- paste(submsg, format(maxmeansteps, nsmall=3))
+        plot3 <- plot3 + annotate("text", x = 1550, y = 205, label = submsg, color = "blue4")
+        
         
         print(plot3)
         #dev.off() 

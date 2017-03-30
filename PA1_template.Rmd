@@ -70,6 +70,7 @@ output:
  
         
         print(plot1)
+```
 
 ### Calculate and report the mean and median total number of steps taken per day
 ```{r, echo = TRUE}
@@ -84,18 +85,98 @@ output:
                 select(totalsteps) %>%
                 summarise(meansteps = mean(totalsteps), mediansteps = median(totalsteps))
         
-        strmean <- paste("The mean total number of steps take per day = ", tblstats$meansteps)
-        strmedian <- paste("The median total number of steps take per day = ", tblstats$mediansteps)
+        strmean <- paste("The mean total number of steps take per day = ",
+                         tblstats$meansteps)
+        strmedian <- paste("The median total number of steps take per day = ",
+                         tblstats$mediansteps)
         print(strmean)
         print(strmedian)
 
 ```        
 
-        ## What is the average daily activity pattern?
+## What is the average daily activity pattern?
+### Make a time series plot  of the 5-minute interval x-axis,
+### and the average number of steps taken, averaged across all days y-axis
 
+```{r, echo = TRUE}
+        tblintervals <- tblactivity %>%
+                select(steps,
+                       interval,
+                       date) %>%
+                filter(!is.na(steps)) %>%
+                arrange(interval) %>%
+                group_by(interval) %>%
+                summarise(intervalmeansteps = mean(steps))
+
+        # get the interval with the highest mean of steps
+        tblmaxinterval <- tblintervals %>%
+                        arrange(intervalmeansteps)
+        
+        # find the max mean step interval
+        maxrow <- nrow(tblmaxinterval)
+        maxinterval <- tblmaxinterval[maxrow, 1]
+        maxmeansteps <- tblmaxinterval[maxrow,2]
+        
+        # get the interval dates
+        tbldates <- tblactivity %>%
+                select(date) %>%
+                mutate(intervaldate = as.Date(date, format = "%Y-%m-%d")) %>%
+                arrange(intervaldate) %>%
+                summarise(mindate = min(intervaldate), maxdate = max(intervaldate))
+
+        
+        mindate <- tbldates[1,1]
+        maxdate <- tbldates[1,2]
+        
+        # plot the histogram of steps each day
+        plot3 <- ggplot(tblintervals, aes(x =interval, 
+                                      y = intervalmeansteps))
+        plot3 <- plot3 + geom_line(size=1)
+        plot3 <- plot3 + labs(x = "Interval Number" ,
+                              y = "Average Steps per Interval", 
+                              title = "Average Steps for Each Interval Across All Days",
+                              subtitle = paste("Dates from ", 
+                                                format(mindate, format="%Y-%m-%d"),
+                                                " to ",
+                                                format(maxdate, format="%Y-%m-%d")))
+        plot3 <- plot3 + theme(plot.title=element_text(size=14, 
+                                                       hjust=0.5, 
+                                                       face="bold", 
+                                                       colour="darkorchid4", 
+                                                       vjust=-1))
+        plot3 <- plot3 + theme(plot.subtitle=element_text(size=10, 
+                                                          hjust=0.5, 
+                                                          face="bold", 
+                                                          colour="black", 
+                                                          vjust=-1))
+        plot3 <- plot3 + theme(panel.border = element_rect(colour = "black",
+                                                           fill=NA, 
+                                                           size=2))
+        submsg <- " <- Highest average interval "
+        submsg <- paste(submsg, maxinterval)
+        submsg <- paste(submsg, " with a mean of ")
+        submsg <- paste(submsg, format(maxmeansteps, nsmall=3))
+        plot3 <- plot3 + annotate("text", x = 1550, y = 205, label = submsg, color = "blue4")
+        
+        
+        print(plot3)
+```
 
 
 ## Imputing missing values
+### Calculate and report the total number of missing values in the dataset
+### (i.e. the total number of rows with NAs)
+```{r, echo = TRUE }        
+        tblNAs <- tblactivity %>%
+        select(steps,
+               interval,
+               date) %>%
+        filter(is.na(steps))
+
+        numNAs <- nrow(tblNAs)
+        strmsg <- "The total number of missing values in the dataset is "
+        print(paste(strmsg, numNAs))
+````
 
 
 

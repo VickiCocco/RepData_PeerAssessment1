@@ -24,6 +24,8 @@ generalanalysis <-
                 select(totalsteps) %>%
                 summarise(meansteps = mean(totalsteps), mediansteps = median(totalsteps))
         
+        tblstats
+        
         #Devise a strategy for filling in all of the missing values in the dataset. 
         #The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, 
         #or the mean for that 5-minute interval, etc.
