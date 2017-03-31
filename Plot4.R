@@ -7,17 +7,17 @@ plot4 <-
                        date) %>%
                 mutate(intervaldate = as.Date(date, format = "%Y-%m-%d"))
 
-        tbldaysteps <- mutate(tbldaysteps, datetype = ifelse(weekdays(intervaldate)=="Saturday" | weekdays(intervaldate)=="Sunday", "weekend", "weekday"))
-
                 tbldaysteps <- tbldaysteps %>%
                 select(steps,
                        interval, 
                        intervaldate) %>%
-                mutate(datetype =  ifelse(weekdays(intervaldate)=="Saturday" | weekdays(intervaldate)=="Sunday", "weekend", "weekday")) %>%
+                mutate(datetype =  ifelse(weekdays(intervaldate)=="Saturday" | weekdays(intervaldate)=="Sunday", "Weekend", "Weekday")) %>%
                 arrange(datetype, interval) %>%
                 group_by(datetype, interval) %>%
                 summarise(meansteps = mean(steps))
-
+                
+                cbPalette <- c("purple2", 
+                               "blue4")
                 
                 #create the plot
                 plot5 <- ggplot(tbldaysteps, aes(x= interval, 
@@ -25,10 +25,11 @@ plot4 <-
                                              group = datetype, 
                                              colour= datetype))
                 plot5 <- plot5 + geom_line(size = 1) 
+                plot5 <- plot5 + scale_colour_manual(values = cbPalette)
                 plot5 <- plot5 + facet_wrap(~ datetype, ncol = 1, nrow = 2)
                 plot5 <- plot5 + labs(x = "Interval Number" ,
                                       y = "Average Steps per Interval", 
-                                      title = "Average Steps for Each Interval Across All Days")
+                                      title = "Average Steps for Each Interval Across Each Day Type")
                 plot5 <- plot5 + theme(plot.title=element_text(size=14, 
                                                                hjust=0.5, 
                                                                face="bold", 
@@ -42,5 +43,6 @@ plot4 <-
                 plot5 <- plot5 + theme(panel.border = element_rect(colour = "black",
                                                                    fill=NA, 
                                                                    size=2))
+                plot5 <- plot5 + theme(legend.position="none")
                 print(plot5)  
                 

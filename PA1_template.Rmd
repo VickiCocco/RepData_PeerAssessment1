@@ -1,5 +1,6 @@
 ---
 title: "Reproducible Research: Peer Assessment 1"
+author: Victoria Cocco
 output: 
   html_document:
     keep_md: true
@@ -276,8 +277,6 @@ output:
 
         print(plot4)
 
-
-
 ```
 ``` {r, echo = TRUE}
         tblimputedstats <- tblcomplete %>%
@@ -303,3 +302,60 @@ output:
 
 ```
 ## Are there differences in activity patterns between weekdays and weekends?
+### Create a new factor variable in the dataset with two levels – “weekday” and “weekend”
+### indicating whether a given date is a weekday or weekend day.
+``` {r, echo = TRUE}        
+        tbldaysteps <- tblcomplete %>%
+                select(steps,
+                       interval,
+                       date) %>%
+                mutate(intervaldate = as.Date(date, format = "%Y-%m-%d"))
+
+
+        tbldaysteps <- tbldaysteps %>%
+                select(steps,
+                       interval, 
+                       intervaldate) %>%
+                mutate(datetype =  ifelse(weekdays(intervaldate)=="Saturday" |                                       weekdays(intervaldate)=="Sunday", "weekend", "weekday")) %>%
+                arrange(datetype, interval) %>%
+                group_by(datetype, interval) %>%
+                summarise(meansteps = mean(steps))
+```
+### Make a panel plot containing a time series plotof the 5-minute interval (x-axis) 
+### and the average number of steps taken, 
+### averaged across all weekday days or weekend days (y-axis). 
+### The plot should look something like the following, 
+### which was created using simulated data:
+``` {r, echo = TRUE}
+
+                cbPalette <- c("purple2", 
+                               "blue4")
+                
+                #create the plot
+                plot5 <- ggplot(tbldaysteps, aes(x= interval, 
+                                             y= meansteps,
+                                             group = datetype, 
+                                             colour= datetype))
+                plot5 <- plot5 + geom_line(size = 1) 
+                plot5 <- plot5 + scale_colour_manual(values = cbPalette)
+                plot5 <- plot5 + facet_wrap(~ datetype, ncol = 1, nrow = 2)
+                plot5 <- plot5 + labs(x = "Interval Number" ,
+                                      y = "Average Steps per Interval", 
+                                      title = "Average Steps for Each Interval Across Each Day Type")
+                plot5 <- plot5 + theme(plot.title=element_text(size=14, 
+                                                               hjust=0.5, 
+                                                               face="bold", 
+                                                               colour="darkorchid4", 
+                                                               vjust=-1))
+                plot5 <- plot5 + theme(plot.subtitle=element_text(size=10, 
+                                                                  hjust=0.5, 
+                                                                  face="bold", 
+                                                                  colour="black", 
+                                                                  vjust=-1))
+                plot5 <- plot5 + theme(panel.border = element_rect(colour = "black",
+                                                                   fill=NA, 
+                                                                   size=2))
+                plot5 <- plot5 + theme(legend.position="none")
+                print(plot5) 
+```
+                
