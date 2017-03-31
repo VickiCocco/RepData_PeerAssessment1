@@ -86,7 +86,7 @@ output:
                 summarise(meansteps = mean(totalsteps), mediansteps = median(totalsteps))
         
         strmean <- paste("The mean total number of steps take per day = ",
-                         tblstats$meansteps)
+                         format(tblstats$meansteps, nsmall = 3))
         strmedian <- paste("The median total number of steps take per day = ",
                          tblstats$mediansteps)
         print(strmean)
@@ -152,11 +152,11 @@ output:
         plot3 <- plot3 + theme(panel.border = element_rect(colour = "black",
                                                            fill=NA, 
                                                            size=2))
-        submsg <- " <- Highest average interval "
+        submsg <- "Highest average interval "
         submsg <- paste(submsg, maxinterval)
         submsg <- paste(submsg, " with a mean of ")
         submsg <- paste(submsg, format(maxmeansteps, nsmall=3))
-        plot3 <- plot3 + annotate("text", x = 1550, y = 205, label = submsg, color = "blue4")
+        plot3 <- plot3 + annotate("text", x = 1650, y = 205, label = submsg, color = "blue4")
         
         
         print(plot3)
@@ -176,8 +176,130 @@ output:
         numNAs <- nrow(tblNAs)
         strmsg <- "The total number of missing values in the dataset is "
         print(paste(strmsg, numNAs))
-````
+```
+### Devise a strategy for filling in all of the missing values in the dataset. 
+### The strategy does not need to be sophisticated. 
+### For example, you could use the mean/median for that day, 
+### or the mean for that 5-minute interval, etc.
+### Create a new dataset that is equal to the original dataset but with the missing data filled in
+```{r, echo = TRUE}
+        tblstats <- tblactivity %>%
+                select(steps,
+                       date) %>%
+                filter(!is.na(steps)) %>%
+                group_by(date) %>%
+                summarise(totalsteps = sum(steps))
+        
+        tblstats <- tblstats %>%
+                select(totalsteps) %>%
+                summarise(meansteps = mean(totalsteps), mediansteps = median(totalsteps))
+                tblstats <- tblactivity %>%
+                select(steps,
+                       date) %>%
+                filter(!is.na(steps)) %>%
+                group_by(date) %>%
+                summarise(totalsteps = sum(steps))
+        
+        tblstats <- tblstats %>%
+                select(totalsteps) %>%
+                summarise(meansteps = mean(totalsteps), mediansteps = median(totalsteps))
+        
+        
+        tblintervalmeans <- tblactivity %>%
+                select(steps,
+                       interval,
+                       date) %>%
+                filter(!is.na(steps)) %>%
+                arrange(interval) %>%
+                group_by(interval) %>%
+                summarise(intervalmeansteps = mean(steps))
+        
+        tblintervals <- tblactivity %>%
+                select(steps,
+                       interval,
+                       date) %>%
+                filter(!is.na(steps))
+
+        tblimputedNAs <- left_join(tblNAs, tblintervalmeans, by = "interval")
+        tblimputedNAs <- select(tblimputedNAs, intervalmeansteps, interval, date)
+        colnames(tblimputedNAs) <- c('steps', 'interval', 'date')
+        
+        tblcomplete <- rbind(tblintervals, tblimputedNAs)
+        
+        tblsteps <- tblcomplete %>%
+                select(steps,
+                       date,
+                       interval) %>%
+                filter(!is.na(steps))%>%
+                mutate(intervaldate = as.Date(date, format = "%Y-%m-%d")) %>%
+                arrange(intervaldate) %>%
+                group_by(intervaldate) %>%
+                summarise(daysteps = sum(steps))
+```
+### Make a histogram of the total number of steps taken each day and
+### Calculate and report the mean and median total number of steps taken per day. 
+### Do these values differ from the estimates from the first part of the assignment? 
+### What is the impact of imputing missing data on the estimates of the total daily number of steps?
+
+```{r, echo = TRUE}                
+        tblsteps <- tblcomplete %>%
+                select(steps,
+                       date,
+                       interval) %>%
+                filter(!is.na(steps))%>%
+                mutate(intervaldate = as.Date(date, format = "%Y-%m-%d")) %>%
+                arrange(intervaldate) %>%
+                group_by(intervaldate) %>%
+                summarise(daysteps = sum(steps))
+        
+        tblsteps <- tblcomplete %>%
+                select(steps,
+                        date,
+                        interval) %>%
+                filter(!is.na(steps))%>%
+                mutate(intervaldate = as.Date(date, format = "%Y-%m-%d")) %>%
+                arrange(intervaldate) %>%
+                group_by(intervaldate) %>%
+                summarise(daysteps = sum(steps))
+        plot4 <- ggplot(tblsteps, aes(daysteps))
+        plot4 <- plot4 + geom_histogram(bins = 10, aes(fill = ..count..))
+        plot4 <- plot4 + labs(x = "Number of Steps per Day" ,
+                      y = "How Many Days at Each Count", 
+                      title = "Distribution of Number of Steps per Day with Imputed Interval Means",
+                      subtitle = "2012")
+        plot4 <- plot4 + theme(plot.title=element_text(size=14, 
+                                                       hjust=0.5, 
+                                                       face="bold", 
+                                                       colour="darkorchid4", 
+                                                       vjust=-1)) 
+
+
+        print(plot4)
 
 
 
+```
+``` {r, echo = TRUE}
+        tblimputedstats <- tblcomplete %>%
+                select(steps,
+                       date) %>%
+                filter(!is.na(steps)) %>%
+                group_by(date) %>%
+                summarise(totalsteps = sum(steps))
+
+        tblimputedstats <- tblimputedstats %>%
+                select(totalsteps) %>%
+                summarise(meansteps = mean(totalsteps), mediansteps = median(totalsteps))
+
+        imputedmeandiff <- format(tblstats$meansteps - tblimputedstats$meansteps, nsmall=3)
+        imputedmediandiff <- tblstats$mediansteps - tblimputedstats$mediansteps
+        
+        strmsg <- "The difference between mean with NAs and the imputed mean is "
+        strmsg <- paste(strmsg, imputedmeandiff)
+        print(strmsg)
+        strmsg <- "The difference between median with NAs and the imputed median is "
+        strmsg <- paste(strmsg, imputedmediandiff)
+        print(strmsg)
+
+```
 ## Are there differences in activity patterns between weekdays and weekends?
