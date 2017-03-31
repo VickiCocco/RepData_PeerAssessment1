@@ -1,7 +1,10 @@
 # Reproducible Research: Peer Assessment 1
+Victoria Cocco  
 
 
 ## Loading and preprocessing the data
+### Load the data (i.e. read.csv())
+### Process/transform the data (if necessary) into a format suitable for your analysis
 
 
 
@@ -18,7 +21,7 @@
 ## package 'dplyr' successfully unpacked and MD5 sums checked
 ## 
 ## The downloaded binary packages are in
-## 	C:\Users\Victoria\AppData\Local\Temp\Rtmp0SZZQA\downloaded_packages
+## 	C:\Users\Victoria\AppData\Local\Temp\RtmpwFBnzv\downloaded_packages
 ```
 
 ```r
@@ -59,7 +62,7 @@
 ## package 'dtplyr' successfully unpacked and MD5 sums checked
 ## 
 ## The downloaded binary packages are in
-## 	C:\Users\Victoria\AppData\Local\Temp\Rtmp0SZZQA\downloaded_packages
+## 	C:\Users\Victoria\AppData\Local\Temp\RtmpwFBnzv\downloaded_packages
 ```
 
 ```r
@@ -83,7 +86,7 @@
 ## package 'ggplot2' successfully unpacked and MD5 sums checked
 ## 
 ## The downloaded binary packages are in
-## 	C:\Users\Victoria\AppData\Local\Temp\Rtmp0SZZQA\downloaded_packages
+## 	C:\Users\Victoria\AppData\Local\Temp\RtmpwFBnzv\downloaded_packages
 ```
 
 ```r
@@ -244,7 +247,7 @@
         submsg <- paste(submsg, maxinterval)
         submsg <- paste(submsg, " with a mean of ")
         submsg <- paste(submsg, format(maxmeansteps, nsmall=3))
-        plot3 <- plot3 + annotate("text", x = 1600, y = 205, label = submsg, color = "blue4")
+        plot3 <- plot3 + annotate("text", x = 1650, y = 205, label = submsg, color = "blue4")
         
         
         print(plot3)
@@ -409,3 +412,62 @@
 ## [1] "The difference between median with NAs and the imputed median is  -1.1886792452824"
 ```
 ## Are there differences in activity patterns between weekdays and weekends?
+### Create a new factor variable in the dataset with two levels – “weekday” and “weekend”
+### indicating whether a given date is a weekday or weekend day.
+
+```r
+        tbldaysteps <- tblcomplete %>%
+                select(steps,
+                       interval,
+                       date) %>%
+                mutate(intervaldate = as.Date(date, format = "%Y-%m-%d"))
+
+        tbldaysteps <- tbldaysteps %>%
+                select(steps,
+                       interval, 
+                       intervaldate) %>%
+                mutate(datetype =  ifelse(weekdays(intervaldate)=="Saturday" |                                       weekdays(intervaldate)=="Sunday", "Weekend", "Weekday")) %>%
+                arrange(datetype, interval) %>%
+                group_by(datetype, interval) %>%
+                summarise(meansteps = mean(steps))
+```
+### Make a panel plot containing a time series plotof the 5-minute interval (x-axis) 
+### and the average number of steps taken, 
+### averaged across all weekday days or weekend days (y-axis). 
+### The plot should look something like the following, 
+### which was created using simulated data:
+
+```r
+                cbPalette <- c("purple2", 
+                               "blue4")
+                
+                #create the plot
+                plot5 <- ggplot(tbldaysteps, aes(x= interval, 
+                                             y= meansteps,
+                                             group = datetype, 
+                                             colour= datetype))
+                plot5 <- plot5 + geom_line(size = 1) 
+                plot5 <- plot5 + scale_colour_manual(values = cbPalette)
+                plot5 <- plot5 + facet_wrap(~ datetype, ncol = 1, nrow = 2)
+                plot5 <- plot5 + labs(x = "Interval Number" ,
+                                      y = "Average Steps per Interval", 
+                                      title = "Average Steps for Each Interval Across Each Day Type")
+                plot5 <- plot5 + theme(plot.title=element_text(size=14, 
+                                                               hjust=0.5, 
+                                                               face="bold", 
+                                                               colour="darkorchid4", 
+                                                               vjust=-1))
+                plot5 <- plot5 + theme(plot.subtitle=element_text(size=10, 
+                                                                  hjust=0.5, 
+                                                                  face="bold", 
+                                                                  colour="black", 
+                                                                  vjust=-1))
+                plot5 <- plot5 + theme(panel.border = element_rect(colour = "black",
+                                                                   fill=NA, 
+                                                                   size=2))
+                plot5 <- plot5 + theme(legend.position="none")
+                print(plot5) 
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+                

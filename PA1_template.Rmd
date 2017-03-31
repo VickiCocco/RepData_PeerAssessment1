@@ -8,6 +8,8 @@ output:
 
 
 ## Loading and preprocessing the data
+### Load the data (i.e. read.csv())
+### Process/transform the data (if necessary) into a format suitable for your analysis
 
 
 ```{r installlibraries, echo = TRUE}
@@ -316,7 +318,7 @@ output:
                 select(steps,
                        interval, 
                        intervaldate) %>%
-                mutate(datetype =  ifelse(weekdays(intervaldate)=="Saturday" |                                       weekdays(intervaldate)=="Sunday", "weekend", "weekday")) %>%
+                mutate(datetype =  ifelse(weekdays(intervaldate)=="Saturday" |                                       weekdays(intervaldate)=="Sunday", "Weekend", "Weekday")) %>%
                 arrange(datetype, interval) %>%
                 group_by(datetype, interval) %>%
                 summarise(meansteps = mean(steps))
