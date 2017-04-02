@@ -21,7 +21,7 @@ Victoria Cocco
 ## package 'dplyr' successfully unpacked and MD5 sums checked
 ## 
 ## The downloaded binary packages are in
-## 	C:\Users\Victoria\AppData\Local\Temp\RtmpwFBnzv\downloaded_packages
+## 	C:\Users\Victoria\AppData\Local\Temp\RtmpmkjJpK\downloaded_packages
 ```
 
 ```r
@@ -62,7 +62,7 @@ Victoria Cocco
 ## package 'dtplyr' successfully unpacked and MD5 sums checked
 ## 
 ## The downloaded binary packages are in
-## 	C:\Users\Victoria\AppData\Local\Temp\RtmpwFBnzv\downloaded_packages
+## 	C:\Users\Victoria\AppData\Local\Temp\RtmpmkjJpK\downloaded_packages
 ```
 
 ```r
@@ -86,7 +86,7 @@ Victoria Cocco
 ## package 'ggplot2' successfully unpacked and MD5 sums checked
 ## 
 ## The downloaded binary packages are in
-## 	C:\Users\Victoria\AppData\Local\Temp\RtmpwFBnzv\downloaded_packages
+## 	C:\Users\Victoria\AppData\Local\Temp\RtmpmkjJpK\downloaded_packages
 ```
 
 ```r
@@ -243,17 +243,24 @@ Victoria Cocco
         plot3 <- plot3 + theme(panel.border = element_rect(colour = "black",
                                                            fill=NA, 
                                                            size=2))
-        submsg <- "Highest average interval "
-        submsg <- paste(submsg, maxinterval)
-        submsg <- paste(submsg, " with a mean of ")
-        submsg <- paste(submsg, format(maxmeansteps, nsmall=3))
-        plot3 <- plot3 + annotate("text", x = 1650, y = 205, label = submsg, color = "blue4")
-        
+          
         
         print(plot3)
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
+```r
+        submsg <- "Highest average interval "
+        submsg <- paste(submsg, maxinterval)
+        submsg <- paste(submsg, " with a mean of ")
+        submsg <- paste(submsg, format(maxmeansteps, nsmall=3))
+        print(submsg)
+```
+
+```
+## [1] "Highest average interval  835  with a mean of  206.1698"
+```
 
 
 ## Imputing missing values
