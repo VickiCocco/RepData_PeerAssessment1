@@ -1,7 +1,12 @@
 # Reproducible Research: Peer Assessment 1
 Victoria Cocco  
 
-
+# Synopsis
+# This assignment makes use of data from a personal activity monitoring device. This device collects data 
+# at 5 minute intervals through out the day. The data consists of two months of data from an anonymous
+# individual collected during the months of October and November, 2012 and include the number of steps
+# taken in 5 minute intervals each day.
+# This report shows the results from a number of inquiries regarding the data and can be used across a dataset incorporating other date ranges.
 ## Loading and preprocessing the data
 ### Load the data (i.e. read.csv())
 ### Process/transform the data (if necessary) into a format suitable for your analysis
@@ -21,7 +26,7 @@ Victoria Cocco
 ## package 'dplyr' successfully unpacked and MD5 sums checked
 ## 
 ## The downloaded binary packages are in
-## 	C:\Users\Victoria\AppData\Local\Temp\RtmpmkjJpK\downloaded_packages
+## 	C:\Users\Victoria\AppData\Local\Temp\RtmpI7hVkL\downloaded_packages
 ```
 
 ```r
@@ -62,7 +67,7 @@ Victoria Cocco
 ## package 'dtplyr' successfully unpacked and MD5 sums checked
 ## 
 ## The downloaded binary packages are in
-## 	C:\Users\Victoria\AppData\Local\Temp\RtmpmkjJpK\downloaded_packages
+## 	C:\Users\Victoria\AppData\Local\Temp\RtmpI7hVkL\downloaded_packages
 ```
 
 ```r
@@ -86,7 +91,7 @@ Victoria Cocco
 ## package 'ggplot2' successfully unpacked and MD5 sums checked
 ## 
 ## The downloaded binary packages are in
-## 	C:\Users\Victoria\AppData\Local\Temp\RtmpmkjJpK\downloaded_packages
+## 	C:\Users\Victoria\AppData\Local\Temp\RtmpI7hVkL\downloaded_packages
 ```
 
 ```r
@@ -441,11 +446,9 @@ Victoria Cocco
 ### Make a panel plot containing a time series plotof the 5-minute interval (x-axis) 
 ### and the average number of steps taken, 
 ### averaged across all weekday days or weekend days (y-axis). 
-### The plot should look something like the following, 
-### which was created using simulated data:
 
 ```r
-                cbPalette <- c("purple2", 
+              cbPalette <- c("purple2", 
                                "blue4")
                 
                 #create the plot
@@ -459,17 +462,12 @@ Victoria Cocco
                 plot5 <- plot5 + labs(x = "Interval Number" ,
                                       y = "Average Steps per Interval", 
                                       title = "Average Steps for Each Interval Across Each Day Type")
-                plot5 <- plot5 + theme(plot.title=element_text(size=14, 
-                                                               hjust=0.5, 
-                                                               face="bold", 
-                                                               colour="darkorchid4", 
-                                                               vjust=-1))
-                plot5 <- plot5 + theme(plot.subtitle=element_text(size=10, 
-                                                                  hjust=0.5, 
-                                                                  face="bold", 
-                                                                  colour="black", 
-                                                                  vjust=-1))
-                plot5 <- plot5 + theme(panel.border = element_rect(colour = "black",
+                plot5 <- plot5 + theme(plot.title=element_text(size=14,,
+                                                                hjust=0.5, 
+                                                                face="bold", 
+                                                                colour="darkorchid4", 
+                                                                vjust=-1))
+               plot5 <- plot5 + theme(panel.border = element_rect(colour = "black",
                                                                    fill=NA, 
                                                                    size=2))
                 plot5 <- plot5 + theme(legend.position="none")

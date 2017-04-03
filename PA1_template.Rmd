@@ -5,12 +5,13 @@ output:
   html_document:
     keep_md: true
 ---
-# This assignment makes use of data from a personal activity monitoring device. This device collects data # at 5 minute intervals through out the day. The data consists of two months of data from an anonymous
+
+# Synopsis
+# This assignment makes use of data from a personal activity monitoring device. This device collects data 
+# at 5 minute intervals through out the day. The data consists of two months of data from an anonymous
 # individual collected during the months of October and November, 2012 and include the number of steps
 # taken in 5 minute intervals each day.
-# This report shows the results from a number of inquiries regarding the data and can be used 
-# across a dataset incorporating other date ranges.
-
+# This report shows the results from a number of inquiries regarding the data and can be used across a dataset incorporating other date ranges.
 ## Loading and preprocessing the data
 ### Load the data (i.e. read.csv())
 ### Process/transform the data (if necessary) into a format suitable for your analysis
@@ -334,8 +335,6 @@ output:
 ### Make a panel plot containing a time series plotof the 5-minute interval (x-axis) 
 ### and the average number of steps taken, 
 ### averaged across all weekday days or weekend days (y-axis). 
-### The plot should look something like the following, 
-### which was created using simulated data:
 ``` {r, echo = TRUE}
               cbPalette <- c("purple2", 
                                "blue4")
@@ -351,10 +350,11 @@ output:
                 plot5 <- plot5 + labs(x = "Interval Number" ,
                                       y = "Average Steps per Interval", 
                                       title = "Average Steps for Each Interval Across Each Day Type")
-                                                             hjust=0.5, 
-                                                               face="bold", 
-                                                               colour="darkorchid4", 
-                                                               vjust=-1))
+                plot5 <- plot5 + theme(plot.title=element_text(size=14,,
+                                                                hjust=0.5, 
+                                                                face="bold", 
+                                                                colour="darkorchid4", 
+                                                                vjust=-1))
                plot5 <- plot5 + theme(panel.border = element_rect(colour = "black",
                                                                    fill=NA, 
                                                                    size=2))
